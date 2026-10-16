@@ -14,7 +14,7 @@
   --muted:#4f5f6c;
   --line:#d5dde2;
   --accent:#1f6f8b;      /* southerly sea-blue */
-  --accent-ink:#ffffff;
+  --accent-ink:#ffffff; --btn:#1f6f8b;
   --warm:#b8763a;        /* kelp / tussock */
   --band:#e6edf0;
   --good:#2f7d5b; --warn:#b07a1f; --bad:#b04a3a;
@@ -26,11 +26,11 @@
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0e171f; --surface:#15212b; --ink:#e6edf1; --muted:#9fb0bc; --line:#2a3a47;
-  --accent:#5fb3cf; --accent-ink:#06141c; --warm:#d99a5c; --band:#121e27;
+  --accent:#5fb3cf; --accent-ink:#ffffff; --btn:#237a96; --warm:#d99a5c; --band:#121e27;
   --good:#5cbf92; --warn:#d9a845; --bad:#e07a68; --deep:#08111a; --deep-2:#0c1823; --deep-line:#22323f; color-scheme:dark;}}
 :root[data-theme="dark"]{
   --bg:#0e171f; --surface:#15212b; --ink:#e6edf1; --muted:#9fb0bc; --line:#2a3a47;
-  --accent:#5fb3cf; --accent-ink:#06141c; --warm:#d99a5c; --band:#121e27;
+  --accent:#5fb3cf; --accent-ink:#ffffff; --btn:#237a96; --warm:#d99a5c; --band:#121e27;
   --good:#5cbf92; --warn:#d9a845; --bad:#e07a68; --deep:#08111a; --deep-2:#0c1823; --deep-line:#22323f; color-scheme:dark;}
 
 *{box-sizing:border-box}
@@ -59,15 +59,23 @@ header.site .wrap{display:flex;align-items:center;justify-content:space-between;
 nav.main{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
 nav.main a{color:var(--ink);text-decoration:none;font-size:.95rem}
 nav.main a:hover{color:var(--accent)}
-.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:11px 18px;font:600 .95rem var(--f-body);text-decoration:none;cursor:pointer}
+nav.main a.btn, nav.main a.btn:hover{color:#fff}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--btn);color:#fff;border:0;border-radius:6px;padding:11px 18px;font:600 .95rem var(--f-body);text-decoration:none;cursor:pointer}
 .btn:hover{filter:brightness(1.08)}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
-@media (max-width:820px){nav.main a:not(.btn){display:none}}
+@media (max-width:900px){
+  header.site .wrap{flex-wrap:wrap;row-gap:10px}
+  nav.main{flex-wrap:nowrap;overflow-x:auto;width:100%;gap:18px;padding-bottom:4px;scrollbar-width:none}
+  nav.main a{white-space:nowrap;font-size:.9rem}
+  nav.main .btn{padding:7px 14px}
+}
 
 /* Hero */
 .hero{position:relative;overflow:hidden;padding-block:clamp(64px,10vw,120px) clamp(48px,7vw,88px)}
-#wind{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.55}
+#wind{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.8;
+  -webkit-mask-image:linear-gradient(100deg,rgba(0,0,0,.28) 0%,rgba(0,0,0,.45) 40%,#000 75%);
+          mask-image:linear-gradient(100deg,rgba(0,0,0,.28) 0%,rgba(0,0,0,.45) 40%,#000 75%)}
 .hero .wrap{position:relative;display:grid;gap:26px}
 .hero h1{font-size:clamp(2.2rem,5.4vw,4rem);max-width:18ch}
 .hero h1 em{color:var(--accent)}
@@ -126,7 +134,7 @@ nav.main a:hover{color:var(--accent)}
 .likert label{position:relative}
 .likert input{position:absolute;opacity:0;inset:0}
 .likert span{display:inline-grid;place-items:center;min-width:2.6rem;height:2.3rem;padding:0 8px;border:1px solid var(--line);border-radius:6px;font-family:var(--f-mono);font-size:.85rem;cursor:pointer;background:var(--surface)}
-.likert input:checked + span{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.likert input:checked + span{background:var(--btn);color:#fff;border-color:var(--btn)}
 .likert input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
 .anchors{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);max-width:19rem}
 .result{position:sticky;top:90px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:24px;display:grid;gap:14px}
@@ -193,11 +201,25 @@ textarea{min-height:110px;resize:vertical}
 
 footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);font-size:.88rem}
 footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer nav{display:flex;gap:18px;flex-wrap:wrap}
+footer nav a{color:var(--muted);text-decoration:none}
+footer nav a:hover{color:var(--accent)}
+
+/* Pages */
+nav.main a[aria-current="page"]:not(.btn){color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent)}
+.pcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
+.pcard{display:grid;gap:10px;align-content:start;padding:24px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);text-decoration:none;transition:border-color .15s}
+.pcard:hover{border-color:var(--accent)}
+.pcard .k{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--warm)}
+.pcard p{color:var(--muted);font-size:.95rem}
+.pcard .go{color:var(--accent);font-weight:600;font-size:.92rem}
+.teaser{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.story .btn{background:var(--btn);color:#fff}
 </style>
 
 <header class="site">
   <div class="wrap">
-    <a class="brand" href="#top" aria-label="Notus Governance home">
+    <a class="brand" href="#home" aria-label="Notus Governance home">
       <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
         <circle cx="17" cy="17" r="15.5" fill="none" stroke="var(--ink)" stroke-width="1.2"/>
         <path d="M17 31 L13.2 17 L17 4 L20.8 17 Z" fill="none" stroke="var(--ink)" stroke-width="1.1"/>
@@ -206,18 +228,18 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
       <div><span>Notus</span><small>Governance</small></div>
     </a>
     <nav class="main" aria-label="Main">
-      <a href="#evaluations">Evaluations</a>
-      <a href="#process">How it works</a>
-      <a href="#framework">Framework</a>
-      <a href="#packages">Packages</a>
-      <a href="#our-name">Our name</a>
-      <a class="btn" href="#contact">Book a call</a>
+      <a href="#home" data-nav="home">Home</a>
+      <a href="#evaluations" data-nav="evaluations">Evaluations</a>
+      <a href="#how-it-works" data-nav="how-it-works">How it works</a>
+      <a href="#health-check" data-nav="health-check">Health check</a>
+      <a href="#our-story" data-nav="our-story">Our story</a>
+      <a class="btn" href="#contact" data-nav="contact">Contact</a>
     </nav>
   </div>
 </header>
 
 <main id="top">
-  <section class="hero">
+  <section class="hero" data-page="home">
     <canvas id="wind" aria-hidden="true"></canvas>
     <div class="wrap">
       <p class="eyebrow">Board evaluation · Aotearoa New Zealand</p>
@@ -235,7 +257,29 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     </div>
   </section>
 
-  <section id="evaluations" class="band">
+  <section class="band" data-page="home">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Explore</p>
+        <h2>Start where it's useful</h2>
+      </div>
+      <div class="pcards">
+        <a class="pcard" href="#evaluations"><span class="k">Evaluations</span><h3>What we review</h3><p>Five evaluation types, from the whole board to the CEO, and three packages to choose from.</p><span class="go">See evaluations →</span></a>
+        <a class="pcard" href="#how-it-works"><span class="k">How it works</span><h3>Process and framework</h3><p>Four stages over six to eight weeks, six governance dimensions and a sample report.</p><span class="go">See how it works →</span></a>
+        <a class="pcard" href="#health-check"><span class="k">Health check</span><h3>Rate your board</h3><p>Six statements, two minutes, and an instant read on where to look first.</p><span class="go">Take the health check →</span></a>
+        <a class="pcard" href="#our-story"><span class="k">Our story</span><h3>Why the south wind</h3><p>In Aotearoa the south wind clears the air. That's what we set out to do for boards.</p><span class="go">Read our story →</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="story" data-page="home">
+    <div class="wrap teaser">
+      <p class="pivot" style="margin:0">The same wind, a different welcome. In the north, Notus was feared. Down here, the southerly is the change everyone waits for.</p>
+      <a class="btn" href="#our-story">Read our story</a>
+    </div>
+  </section>
+
+  <section class="band" data-page="evaluations">
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">What we evaluate</p>
@@ -252,7 +296,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     </div>
   </section>
 
-  <section id="process">
+  <section data-page="how-it-works">
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">How it works</p>
@@ -267,7 +311,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     </div>
   </section>
 
-  <section id="framework" class="band">
+  <section class="band" data-page="how-it-works">
     <div class="wrap split">
       <div>
         <div class="sec-head">
@@ -300,7 +344,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     </div>
   </section>
 
-  <section id="health-check">
+  <section data-page="health-check">
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">Free health check</p>
@@ -323,7 +367,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     </div>
   </section>
 
-  <section class="band">
+  <section data-page="how-it-works">
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">Our approach</p>
@@ -338,7 +382,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     </div>
   </section>
 
-  <section id="packages">
+  <section data-page="evaluations">
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">Packages</p>
@@ -369,7 +413,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     </div>
   </section>
 
-  <section id="our-name" class="story">
+  <section class="story" data-page="our-story">
     <div class="wrap">
       <div class="story-head">
         <p class="eyebrow">The story behind the name</p>
@@ -412,7 +456,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     </div>
   </section>
 
-  <section id="contact">
+  <section data-page="contact">
     <div class="wrap contact">
       <div class="sec-head" style="margin:0">
         <p class="eyebrow">Get in touch</p>
@@ -443,6 +487,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 <footer>
   <div class="wrap">
     <span>© 2026 Notus Governance. Clear air for better boards.</span>
+    <nav aria-label="Footer"><a href="#home">Home</a><a href="#evaluations">Evaluations</a><a href="#how-it-works">How it works</a><a href="#health-check">Health check</a><a href="#our-story">Our story</a><a href="#contact">Contact</a></nav>
     <span>Board, chair, director, committee and CEO evaluations</span>
   </div>
 </footer>
@@ -489,25 +534,86 @@ score();
 // Contact form (draft: no submission)
 document.getElementById("contact-form").addEventListener("submit",e=>{e.preventDefault();document.getElementById("c-sent").hidden=false;});
 
+// Page router: each nav item shows its own page
+const PAGES={"home":"","evaluations":"Evaluations","how-it-works":"How it works","health-check":"Health check","our-story":"Our story","contact":"Contact"};
+function route(){
+  let p=location.hash.slice(1); if(!(p in PAGES)) p="home";
+  document.querySelectorAll("main > section[data-page]").forEach(s=>{s.hidden=s.dataset.page!==p;});
+  document.querySelectorAll("nav.main a[data-nav]").forEach(a=>{ if(a.dataset.nav===p) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+  document.title=PAGES[p]?PAGES[p]+" · Notus Governance":"Notus Governance";
+  window.scrollTo(0,0);
+  if(p==="home") dispatchEvent(new Event("resize"));
+}
+addEventListener("hashchange",route);
+route();
+
 // Southerly wind field: lines drifting up the page from the south
+// Long streamlines sweep up from the south-west, bending gently like air over land.
+// The lines sway slowly, and soft gusts travel along them. Each gust fades in and out at both ends.
 (function(){
   const c=document.getElementById("wind"), x=c.getContext("2d");
   const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let w,h,dpr,parts=[];
-  function size(){dpr=Math.min(devicePixelRatio||1,2);w=c.offsetWidth;h=c.offsetHeight;c.width=w*dpr;c.height=h*dpr;x.setTransform(dpr,0,0,dpr,0,0);
-    parts=Array.from({length:Math.round(w/14)},()=>({x:Math.random()*w,y:Math.random()*h,l:40+Math.random()*90,s:.25+Math.random()*.6,p:Math.random()*6.28}));}
-  function col(){return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim()||"#1f6f8b";}
-  function draw(t){
-    x.clearRect(0,0,w,h); x.strokeStyle=col(); x.lineWidth=1;
-    for(const p of parts){
-      x.globalAlpha=.35; x.beginPath();
-      for(let k=0;k<=p.l;k+=6){const yy=p.y-k, xx=p.x+Math.sin((yy+t*.02)*.012+p.p)*14; k?x.lineTo(xx,yy):x.moveTo(xx,yy);}
-      x.stroke();
-      if(!reduce){p.y-=p.s; if(p.y+0<-p.l){p.y=h+p.l;p.x=Math.random()*w;}}
-    }
-    if(!reduce) requestAnimationFrame(draw);
+  let w=0,h=0,lines=[],color="#1f6f8b",last=0;
+  const STEP=7;
+  function readColor(){color=getComputedStyle(document.documentElement).getPropertyValue("--accent").trim()||color;}
+  // Flow direction: up and to the right (a southerly sweeping north), with slow broad bends
+  function angle(px,py,t){
+    return -0.62
+      + 0.22*Math.sin(px*0.0032 + t*0.00009)
+      + 0.14*Math.cos(py*0.006 - t*0.00007)
+      + 0.08*Math.sin((px-py)*0.008 + t*0.00013);
   }
-  size(); addEventListener("resize",size); requestAnimationFrame(draw);
+  function trace(sx,sy,t){
+    const pts=[]; let px=sx,py=sy;
+    for(let k=0;k<600;k++){
+      pts.push(px,py);
+      const a=angle(px,py,t); px+=Math.cos(a)*STEP; py+=Math.sin(a)*STEP;
+      if(px>w+20||py<-20) { pts.push(px,py); break; }
+    }
+    return pts;
+  }
+  function size(){
+    const dpr=Math.min(devicePixelRatio||1,2);
+    w=c.offsetWidth; h=c.offsetHeight; if(!w||!h) return;
+    c.width=w*dpr; c.height=h*dpr; x.setTransform(dpr,0,0,dpr,0,0);
+    // Seed points spaced along the left and bottom edges
+    const gap=Math.max(26,Math.min(42,w/34)), seeds=[];
+    for(let y=h*0.15;y<=h+gap;y+=gap) seeds.push([-10,y]);
+    for(let sx=gap;sx<w*0.9;sx+=gap) seeds.push([sx,h+10]);
+    lines=seeds.map(([sx,sy],i)=>({sx,sy,phase:Math.random(),speed:0.00005+Math.random()*0.00005,gl:0.18+Math.random()*0.14,wd:i%3===0?1.3:0.9}));
+    readColor(); draw(0);
+  }
+  function stroke(pts,from,to,alphaFn,width){
+    x.lineWidth=width;
+    for(let i=from;i<to;i++){
+      const a=alphaFn(i); if(a<=0.01) continue;
+      x.globalAlpha=a; x.beginPath();
+      x.moveTo(pts[i*2],pts[i*2+1]); x.lineTo(pts[i*2+2],pts[i*2+3]); x.stroke();
+    }
+  }
+  function draw(t){
+    x.clearRect(0,0,w,h); x.strokeStyle=color; x.lineCap="round"; x.lineJoin="round";
+    for(const L of lines){
+      const pts=trace(L.sx,L.sy,t), n=pts.length/2-1; if(n<2) continue;
+      // The resting line, faint and continuous
+      x.globalAlpha=0.16; x.lineWidth=L.wd; x.beginPath(); x.moveTo(pts[0],pts[1]);
+      for(let i=1;i<=n;i++) x.lineTo(pts[i*2],pts[i*2+1]);
+      x.stroke();
+      if(reduce) continue;
+      // A gust: a brighter stretch that travels along the line, tapered at both ends
+      const span=Math.max(12,Math.round(n*L.gl));
+      const head=((L.phase + t*L.speed) % 1) * (n+span) - span;
+      const from=Math.max(0,Math.floor(head)), to=Math.min(n,Math.ceil(head+span));
+      stroke(pts,from,to,i=>0.6*Math.pow(Math.sin(Math.PI*(i-head)/span),2),L.wd+0.5);
+    }
+    x.globalAlpha=1;
+  }
+  function frame(t){
+    if(w){ if(t-last>1000){readColor(); last=t;} draw(t); }
+    requestAnimationFrame(frame);
+  }
+  size(); addEventListener("resize",size);
+  if(!reduce) requestAnimationFrame(frame);
 })();
 </script>
 
